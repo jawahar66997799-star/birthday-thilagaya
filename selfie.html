@@ -12,13 +12,14 @@ button{ margin-top:20px; padding:10px 20px; cursor:pointer; }
 </head>
 <body>
 <h2>Take your selfie</h2>
-<video id="video" autoplay></video>
-<button onclick="takeSelfie()">Capture & Continue</button>
+<video id="video" autoplay playsinline></video>
+<button id="captureBtn">Capture & Continue</button>
 
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.2.0/firebase-app.js";
 import { getStorage, ref, uploadString } from "https://www.gstatic.com/firebasejs/10.2.0/firebase-storage.js";
 
+// Firebase config
 const firebaseConfig = {
   apiKey: "AIzaSyBUVw2kw1sQXJol7IYV5Fnr0aGBL9U7PBU",
   authDomain: "selfieprank-7c66a.firebaseapp.com",
@@ -30,24 +31,31 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const storage = getStorage(app);
 
+// Camera setup
 const video = document.getElementById("video");
-navigator.mediaDevices.getUserMedia({video:true}).then(stream=>video.srcObject=stream);
+navigator.mediaDevices.getUserMedia({video:true}).then(stream => {
+  video.srcObject = stream;
+}).catch(err => alert("Camera access denied: " + err));
 
-function takeSelfie(){
+// Make button work in module scope
+document.getElementById("captureBtn").addEventListener("click", async () => {
     const canvas = document.createElement("canvas");
     canvas.width = video.videoWidth;
     canvas.height = video.videoHeight;
-    const ctx = canvas.getContext("2d");
-    ctx.drawImage(video,0,0);
+    canvas.getContext("2d").drawImage(video,0,0);
+
     const dataURL = canvas.toDataURL("image/png");
-    
     const uid = localStorage.getItem("uid") || "unknown";
-    const selfieRef = ref(storage, `selfies/${uid}_${Date.now()}.png`);
-    uploadString(selfieRef, dataURL, 'data_url').then(()=>{
+    const fileRef = ref(storage, `selfies/${uid}_${Date.now()}.png`);
+
+    try {
+        await uploadString(fileRef, dataURL, 'data_url');
         alert("Selfie uploaded!");
-        window.location.href="final.html?img="+encodeURIComponent(dataURL);
-    }).catch(e=>alert("Upload failed: "+e));
-}
+        window.location.href = "final.html?img="+encodeURIComponent(dataURL);
+    } catch(e){
+        alert("Upload failed: "+e);
+    }
+});
 </script>
 </body>
 </html>
