@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Final Page</title>
+<style>
+body{ font-family: Arial; display:flex; flex-direction:column; align-items:center; justify-content:center; height:100vh; background:#f4f4f4; }
+img{ width:300px; border-radius:10px; margin-top:20px; }
+h1{ color:#ff0000; }
+</style>
+</head>
+<body>
+<h1>Just for fun 😎</h1>
+<img id="selfie" alt="Your Selfie">
+<script>
+const params = new URLSearchParams(window.location.search);
+const imgData = params.get("img");
+if(imgData){
+    document.getElementById("selfie").src = imgData;
+} else {
+    document.getElementById("selfie").alt = "Selfie not found";
+}
+</script>
+</body>
+</html>

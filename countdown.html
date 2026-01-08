@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Countdown</title>
+<style>
+body { font-family: Arial; display:flex; justify-content:center; align-items:center; height:100vh; background:#000; color:white; text-align:center; }
+h1 { font-size:3em; }
+#warning { font-size:1.2em; margin-top:20px; }
+</style>
+</head>
+<body>
+<div>
+<h1 id="timer">60</h1>
+<p id="warning">⚠️ SECURITY BREACH DETECTED ⚠️</p>
+</div>
+<script>
+let time=60;
+const warningEl = document.getElementById("warning");
+const timerEl = document.getElementById("timer");
+const messages = [
+    "⚠️ SECURITY BREACH DETECTED ⚠️ Unauthorized access detected.",
+    "Device fingerprint identified. Session locked.",
+    "Camera & microphone handshake initiated...",
+    "Private data access request approved. System integrity compromised.",
+    "Location trace confirmed. IP logged.",
+    "DATA TRANSFER IN PROGRESS… DO NOT POWER OFF."
+];
+
+const interval = setInterval(()=>{
+    timerEl.innerText = time;
+    const index = Math.floor((60-time)/10);
+    if(index<messages.length) warningEl.innerText = messages[index];
+    time--;
+    if(time<0){
+        clearInterval(interval);
+        window.location.href="selfie.html";
+    }
+},1000);
+</script>
+</body>
+</html>

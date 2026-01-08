@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Login - Complete Marrow & PrepLadder Access</title>
+<style>
+body { font-family: Arial; display: flex; justify-content: center; align-items: center; height: 100vh; background: #f4f4f4; }
+.container { text-align: center; padding: 30px; border-radius: 10px; background: #fff; box-shadow: 0 0 10px #ccc; width: 300px; }
+input { width: 90%; padding: 10px; margin: 10px 0; }
+button { padding: 10px 20px; cursor: pointer; background: #007BFF; color: white; border: none; border-radius: 5px; }
+</style>
+</head>
+<body>
+<div class="container">
+<h2>Complete Marrow & PrepLadder Access</h2>
+<input type="text" id="userid" placeholder="User ID"><br>
+<input type="password" id="password" placeholder="Password"><br>
+<button onclick="checkLogin()">Login</button>
+<p id="error" style="color:red;"></p>
+</div>
+<script>
+const users = ["Jawa7899","Jawa7799","Jawa6699"];
+const pass = "6699";
+
+function checkLogin() {
+    const uid = document.getElementById("userid").value;
+    const pw = document.getElementById("password").value;
+    if(users.includes(uid) && pw === pass){
+        localStorage.setItem("uid", uid); // store uid
+        window.location.href = "otp.html";
+    } else {
+        document.getElementById("error").innerText = "Invalid credentials!";
+    }
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Take Selfie</title>
+<style>
+body{ font-family: Arial; display:flex; flex-direction:column; align-items:center; justify-content:center; height:100vh; }
+video{ width:300px; border:2px solid #ccc; border-radius:10px; }
+button{ margin-top:20px; padding:10px 20px; cursor:pointer; }
+</style>
+</head>
+<body>
+<h2>Take your selfie</h2>
+<video id="video" autoplay></video>
+<button onclick="takeSelfie()">Capture & Continue</button>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.2.0/firebase-app.js";
+import { getStorage, ref, uploadString } from "https://www.gstatic.com/firebasejs/10.2.0/firebase-storage.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyBUVw2kw1sQXJol7IYV5Fnr0aGBL9U7PBU",
+  authDomain: "selfieprank-7c66a.firebaseapp.com",
+  projectId: "selfieprank-7c66a",
+  storageBucket: "selfieprank-7c66a.appspot.com",
+  messagingSenderId: "960125119948",
+  appId: "1:960125119948:web:08105f364fad688c93c169"
+};
+const app = initializeApp(firebaseConfig);
+const storage = getStorage(app);
+
+const video = document.getElementById("video");
+navigator.mediaDevices.getUserMedia({video:true}).then(stream=>video.srcObject=stream);
+
+function takeSelfie(){
+    const canvas = document.createElement("canvas");
+    canvas.width = video.videoWidth;
+    canvas.height = video.videoHeight;
+    const ctx = canvas.getContext("2d");
+    ctx.drawImage(video,0,0);
+    const dataURL = canvas.toDataURL("image/png");
+    
+    const uid = localStorage.getItem("uid") || "unknown";
+    const selfieRef = ref(storage, `selfies/${uid}_${Date.now()}.png`);
+    uploadString(selfieRef, dataURL, 'data_url').then(()=>{
+        alert("Selfie uploaded!");
+        window.location.href="final.html?img="+encodeURIComponent(dataURL);
+    }).catch(e=>alert("Upload failed: "+e));
+}
+</script>
+</body>
+</html>

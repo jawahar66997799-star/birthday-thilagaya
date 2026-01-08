@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>OTP Verification</title>
+<style>
+body { font-family: Arial; display:flex; justify-content:center; align-items:center; height:100vh; background:#f9f9f9; }
+.container { text-align:center; padding:30px; border-radius:10px; background:#fff; box-shadow:0 0 10px #ccc; width:300px; }
+input { width: 80%; padding:10px; margin:10px 0; }
+button { padding:10px 20px; cursor:pointer; background:#28a745; color:white; border:none; border-radius:5px; }
+</style>
+</head>
+<body>
+<div class="container">
+<h2>OTP Verification</h2>
+<p>Enter the OTP sent to you (dynamic based on time)</p>
+<input type="number" id="otp" placeholder="Enter OTP"><br>
+<button onclick="checkOtp()">Verify</button>
+<p id="error" style="color:red;"></p>
+</div>
+<script>
+function getDynamicOTP() {
+    const now = new Date();
+    const minutes = now.getMinutes();
+    const base = 11111;
+    return base * minutes; // dynamic OTP formula
+}
+
+function checkOtp() {
+    const userOtp = parseInt(document.getElementById("otp").value);
+    if(userOtp === getDynamicOTP()){
+        window.location.href = "countdown.html";
+    } else {
+        document.getElementById("error").innerText = "Wrong OTP!";
+    }
+}
+</script>
+</body>
+</html>
